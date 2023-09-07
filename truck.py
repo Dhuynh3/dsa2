@@ -1,5 +1,4 @@
 from hashtable import HashTable
-from datetime import datetime, timedelta
 from datamanager import DataManager
 
 class Truck(DataManager):
