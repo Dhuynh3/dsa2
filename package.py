@@ -1,3 +1,11 @@
+# This Node is for storing into the linked list
+class PackageDataNode:
+    def __init__(self, package, truck_id, time_delivered, id):
+        self.package = package
+        self.truck_id = truck_id
+        self.time_delivered = time_delivered
+        self.id = id
+        self.next = None
 # Representing individual packages for delivery
 class Package:
     def __init__(self, **kargs):

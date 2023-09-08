@@ -14,13 +14,13 @@ class HashTable:
         return int(key) % self.size
     
     # O(1)
-    def hash_insert(self, key, value):
+    def insert(self, key, value):
         bucket_index = self.hash_function(key)
-        self.buckets[bucket_index].insert_node(value)
+        self.buckets[bucket_index].append_node(value)
         return
     
     # O(N)
-    def hash_search(self, key):
+    def search(self, key):
         bucket_index = self.hash_function(key)
         self.buckets[bucket_index]
 
