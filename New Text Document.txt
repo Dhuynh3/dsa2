@@ -1,4 +1,0 @@
-Goals
-1) Priority List
-2) Hashtable with linked list implementation
-3) Dijkrastas

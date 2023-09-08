@@ -10,7 +10,6 @@ class Package:
         self.weight_kg = kargs.get("weight_kg", None)
         self.special_note = kargs.get("special_note", None)
         self.status = kargs.get("status", None)
-
     # Getters
     def get_package_id(self):
         return self.package_id
