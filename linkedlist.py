@@ -1,7 +1,8 @@
-# Example of a Singly Linked List Node, the node could contain anything as long as it has the next and id attribute
+# Example of a Singly Linked List Node
 class ListNode: 
-    def __init__(self, value, id):
+    def __init__(self, value, id, priority=0):
         self.value = value
+        self.priority = priority
         self.id = id
         self.next = None
 # Singly Linked List Implementation
@@ -37,12 +38,19 @@ class SinglyLinkedList:
             self.append_node(new_list_node)
         else:
             print(f"Value {new_list_node} is already present in the list.")
-    # Print the Linked List
+    # Get the size of the linked list
+    def size(self):
+        count = 0
+        current_node = self.head
+        while current_node:
+            count += 1
+            current_node = current_node.next
+        return count
+    # Traverse the linked list and print information
     def display(self):
         nodes = []
         current_node = self.head
-        # Traverse the list
         while current_node:
-            nodes.append(str(current_node.value))
+            nodes.append(str(current_node.id))
             current_node = current_node.next
         print(" -> ".join(nodes))

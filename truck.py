@@ -34,15 +34,15 @@ class Truck(DataManager):
                         package.set_status("En route, time : " + self.time_count.strftime("%I:%M %p") + "| To Hub : " + package.get_address())
                         self.current_packages.append(package)
                         # When loading any package onto the truck, log the current package status in our hash table
-                        self.package_records.insert(package.get_package_id(), ListNode(package.snapshot()))
+                        self.package_records.insert(package.get_package_id(), ListNode(package.snapshot(),package.get_package_id()))
         # We have loaded the packages based on a given ID, now make a list of nodes we have to visit based on package address
         # For each package that is loaded.
         for package in self.current_packages:
             # Check against each node's address.
             for node in self.nodes_list:
                 # If the package is meant for the node, add it to our node route.
-                if package.get_package_address() == node.get_address():
-                    self.node_route.append_node_without_duplicates(node)
+                if package.get_address() == node.get_address():
+                    self.node_route.append_node_without_duplicates(ListNode(node, node.get_node_id()))
     
 
     def dijkstra(self, start_node, nodes_list):
@@ -55,8 +55,9 @@ class Truck(DataManager):
         start_node.set_shortest_distance(0.0)
         start_node.set_previous_node(None)
 
-
-
+        # We need to keep track of visited and unvisited nodes
+        visited_nodes = SinglyLinkedList()
+        unvisited_nodes = SinglyLinkedList()
 
     # Check if we have a package to deliver at the current node
     def deliver_package(self):
