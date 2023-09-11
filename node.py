@@ -10,7 +10,7 @@ class Node:
         self.previous_node = None
         self.shortest_distance_from_selected_node = float('inf')
     # Getters
-    def get_node_id(self):
+    def get_id(self):
         return self.node_id
     def get_name(self):
         return self.name
@@ -21,7 +21,7 @@ class Node:
     def get_shortest_distance(self):
         return self.shortest_distance_from_selected_node
     # Setters
-    def set_node_id(self, new_node_id):
+    def set_id(self, new_node_id):
         self.node_id = new_node_id
     def set_name(self, new_name):
         self.name = new_name

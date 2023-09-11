@@ -1,10 +1,18 @@
+from datetime import datetime
+
 # Example of a Singly Linked List Node
 class ListNode: 
-    def __init__(self, value, id, priority=0):
+    # value : any object
+    # id : int
+    # priority : int
+    def __init__(self, value, id, time=datetime.strptime("8:00 AM", "%I:%M %p"), next=None):
         self.value = value
-        self.priority = priority
-        self.id = id
-        self.next = None
+        self.time = time
+        self.id = int(id)
+        # Needed to transverse the list
+        self.next = next
+    def snapshot(self):
+        return ListNode(self.value, self.id, self.time)
 # Singly Linked List Implementation
 class SinglyLinkedList:
     def __init__(self):
@@ -37,7 +45,19 @@ class SinglyLinkedList:
         if not self.has_value(new_list_node.id):
             self.append_node(new_list_node)
         else:
-            print(f"Value {new_list_node} is already present in the list.")
+            # print(f"Value {new_list_node} is already present in the list.")
+            return
+    # Taken from pirority queue implementation
+    def dequeue(self):
+        # If empty list return none
+        if self.head == None:
+            return None
+        # Store the current head
+        removed_node = self.head
+        # Make the next the current head
+        self.head = self.head.next
+        # Returned the removed head
+        return removed_node
     # Get the size of the linked list
     def size(self):
         count = 0
@@ -46,6 +66,19 @@ class SinglyLinkedList:
             count += 1
             current_node = current_node.next
         return count
+    # Make copy of Linked List
+    def copy(self):
+        # Create the new list
+        copied_list = SinglyLinkedList()
+        # Start at the head
+        current_node = self.head
+        while current_node:
+            # Append a copied node
+            copied_list.append_node(current_node.snapshot())
+            # Move to the next node
+            current_node = current_node.next
+        # Return a reference to the copied list
+        return copied_list
     # Traverse the linked list and print information
     def display(self):
         nodes = []
