@@ -18,6 +18,18 @@ class SinglyLinkedList:
     def __init__(self):
         self.head = None
         self.tail = None
+    def prepend_node(self, new_list_node):
+        # If head is null, we're inserting the first node in the list.
+        if self.head == None:
+            # First node will be the the head and tail
+            self.head = new_list_node
+            self.tail = new_list_node
+        else:
+        # Not first node inserted in the list
+            # Set new node's next as head
+            new_list_node.next = self.head
+            # Head is now new node
+            self.head = new_list_node
     # You can insert any node class as long as it has a next attribute
     def append_node(self, new_list_node):
         # If head is null, we're inserting the first node in the list.
@@ -47,22 +59,33 @@ class SinglyLinkedList:
         else:
             # print(f"Value {new_list_node} is already present in the list.")
             return
-    # Taken from pirority queue implementation
+    def is_empty(self):
+        return True if self.head == None else False
+    # Pirority queue implementation
     def dequeue(self):
         # If empty list return none
-        if self.head == None:
+        if self.is_empty() == True:
             return None
-        # Store the current head
-        removed_node = self.head
-        # Make the next the current head
-        self.head = self.head.next
-        # Returned the removed head
-        return removed_node
+        # Get the current head
+        current_node = self.head
+        # If it's not the tail
+        if current_node != self.tail:
+            self.head = self.head.next
+        # Else it's the tail
+        else:
+            self.head = None
+            self.tail = None
+        return current_node
+    def peek(self):
+        if self.is_empty() == True:
+            return None
+        else:
+            return self.head
     # Get the size of the linked list
     def size(self):
         count = 0
         current_node = self.head
-        while current_node:
+        while current_node != self.tail:
             count += 1
             current_node = current_node.next
         return count
