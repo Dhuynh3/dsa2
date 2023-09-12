@@ -250,13 +250,14 @@ class Truck(DataManager):
     def deliver_package(self):
         # for package in self.packages_list:
         #     if package in self.current_packages:
+        #         print(package.display())
         #         # Check to see if the package is at the right address
         #         if str(package.get_address()) == str(self.get_current_location().get_address()):
-        #             print("I dropped this shit off" + package.display())
         #             self.current_packages.remove(package)
 
         for package in self.current_packages:
-            # Check to see if the package is at the right address
+            print(package.display())
+            #Check to see if the package is at the right address
             if str(package.get_address()) == str(self.get_current_location().get_address()):
                 print("I dropped this shit off" + package.display())
                 self.current_packages.remove(package)
