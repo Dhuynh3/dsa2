@@ -1,7 +1,7 @@
 import csv
 from node import Node
 from package import Package
-from datetime import datetime, timedelta
+
 
 # Python has a referenced based data structure
 # DataManager is like the GPS for the truck
@@ -31,11 +31,15 @@ class DataManager:
                     deadline=row[5],
                     weight_kg=row[6],
                     special_note=row[7] if len(row) > 1 else None,
-                    status= f"Location : {self.nodes_list[0]} | Time : 8:00 AM"
+                    status=f"Location : {self.nodes_list[0]} | Time : 8:00 AM",
                 )
-                if "Delayed on flight---will not arrive to depot until" in package.get_special_note():
+                if (
+                    "Delayed on flight---will not arrive to depot until"
+                    in package.get_special_note()
+                ):
                     package.set_status(package.get_special_note())
                 self.packages_list.append(package)
+
     # Workaround for getting distance because the 2D Distance Matrix is not fully filled in for the other half
     def get_distance_between_nodes(self, node_one_id, node_two_id):
         try:
