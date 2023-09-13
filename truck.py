@@ -7,7 +7,7 @@ from linkedlist import SinglyLinkedList
 
 """Truck inherites DataManager which is responsible for feeding package, node and distance information to the truck"""
 class Truck(DataManager):
-    def __init__(self, truck_id, start_time, capacity=16):
+    def __init__(self, truck_id, start_time, capacity=16, debug=False):
         super().__init__()
         self.truck_id = truck_id
         self.start_time = start_time
@@ -18,14 +18,7 @@ class Truck(DataManager):
         self.package_records = HashTable(len(self.packages_list))
         self.miles_traveled = 0
         self.current_packages = []
-        self.greedy_path = []
-#####################################################################################
-    def reconstruct_path(self, end_node):
-        path = []
-        while end_node.get_previous_node() != None:
-            path.append(end_node)
-            end_node = end_node.get_previous_node()
-        return path[::-1]
+        self.debug = debug
 #####################################################################################
     """ Get the list of nodes the truck must visit.
         This list is not optimized in order of travel.
@@ -69,8 +62,19 @@ class Truck(DataManager):
     def start_delivery(self, begin_node, end_node):
         # Get the list of node routes
         list_of_node_route = self.get_node_route_list()
+        if (self.debug):
+            print(f"Start Delivery\n---------------\nList of Nodes to Visit")
+            for node in list_of_node_route:
+                self.pause()
+                print(node.display())
+
         optimal_travel_node_path = self.optimized_travel_path(begin_node, end_node, list_of_node_route)
-    
+        if (self.debug):
+            print(f"Optimal Node Path\n---------------\n")
+            for node in optimal_travel_node_path:
+                self.pause()
+                print(node.display())
+        
         # The previous_node is the starting node
         previous_node = optimal_travel_node_path[0]
         for node in optimal_travel_node_path:
@@ -82,6 +86,11 @@ class Truck(DataManager):
             self.miles_traveled += distance_traveled
             # Update the time it took to get there
             self.time_count += timedelta(hours=(distance_traveled / self.speed))
+
+            if (self.debug):
+                print(f"Truck {self.truck_id} at location {node.display()} at time " + self.time_count.strftime("%I:%M %p") + "\n")
+                self.pause()
+
             # We are currently at this node
             self.set_current_location(node)
             # Deliver packages
@@ -139,7 +148,7 @@ class Truck(DataManager):
         # Return a list of visited nodes
         return visited_nodes
 ###########################################################################################
-    """ Load the packages onto the truck then generate a must visit node route.
+    """ Load the packages onto the truck.
     """
     def load_packages_by_id(self, list_of_package_ids):
         # For each of the package ID we want to load.
@@ -150,28 +159,27 @@ class Truck(DataManager):
                 if int(id) == int(package.get_package_id()):
                     # Check if the truck has enough space.
                     if len(self.current_packages) < self.capacity:
-                        package.set_status(
-                            "En route, time : "
-                            + self.time_count.strftime("%I:%M %p")
-                            + "| To Hub : "
-                            + package.get_address()
-                        )
+                        package.set_status("En route, time : " + self.time_count.strftime("%I:%M %p") + " | To Hub : " + package.get_address())
+                        if (self.debug):
+                            print(f"Loading Package\n----------------\n{package.display()}\nOnto Truck {self.truck_id}")
+                            self.pause()
                         self.current_packages.append(package)
                     else:
-                        print(
-                            f"Truck {self.truck_id} : Full not loading package : "
-                            + package.get_package_id()
-                        )
+                        print(f"Truck {self.truck_id} : Full not loading package : " + package.get_package_id() + "\n")
 ###########################################################################################
     """ Deliver appropriate packages at the current node
     """
     def deliver_package(self):
         for package in self.packages_list:
             if package in self.current_packages:
+                package.set_status("En route, time : " + self.time_count.strftime("%I:%M %p") + " | To Hub : " + package.get_address())
                 # Check to see if the package is at the right address
                 if str(package.get_address()) == str(self.get_current_location().get_address()):
+                    if (self.debug):
+                        print(f"Delivering Package : {package.display()} at Location : {self.get_current_location().display()}")
+                        self.pause()
                     self.current_packages.remove(package)
-###########################################################################################
+############################################################################################
     """ Set the current location 
     """
     def set_current_location(self, node):
@@ -192,6 +200,10 @@ class Truck(DataManager):
     """
     def get_truck_id(self):
         return self.truck_id
+    """ Pause execution
+    """
+    def pause(self):
+        input("Press any key to continue...")
     """ Display Truck Information
     """
     def display(self):
