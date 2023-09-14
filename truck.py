@@ -39,19 +39,29 @@ class Truck(DataManager):
         # Return the final list of nodes
         return truck_node_route                                                           
 ###########################################################################################
+    """ Given a list of nodes to visit, a start and end node. Use dijkstra's algorithm
+        to generate the most greedy path possible.
+    """
     def optimized_travel_path(self, start_node, end_node, list_of_node_route):
         optimized_travel_path = []
         begin_node = start_node
+        # Add the start node
         optimized_travel_path.append(begin_node)
         while list_of_node_route:
             visited_node_list = self.dijkstra(start_node, list_of_node_route)
+            # This is usually the first node because it's the one we're on to compare against the rest of the nodes.
             for node in visited_node_list:
                 if node.get_previous_node() == None:
                     visited_node_list.remove(node)
+            # Get the next closes node
             min_node = min(visited_node_list, key=lambda node: node.shortest_distance_from_selected_node)
+            # Append it to our list
             optimized_travel_path.append(min_node)
+            # We have already checked out this node
             list_of_node_route.remove(min_node)
+            # Start dijkstra at our next node
             start_node = min_node
+        # Finally add the end node
         optimized_travel_path.append(end_node)
         return optimized_travel_path
 ###########################################################################################
@@ -67,14 +77,13 @@ class Truck(DataManager):
             for node in list_of_node_route:
                 self.pause()
                 print(node.display())
-
+        # Generate the most optimized path, which is always the next shortest node
         optimal_travel_node_path = self.optimized_travel_path(begin_node, end_node, list_of_node_route)
         if (self.debug):
             print(f"Optimal Node Path\n---------------\n")
             for node in optimal_travel_node_path:
                 self.pause()
                 print(node.display())
-        
         # The previous_node is the starting node
         previous_node = optimal_travel_node_path[0]
         for node in optimal_travel_node_path:
@@ -86,11 +95,9 @@ class Truck(DataManager):
             self.miles_traveled += distance_traveled
             # Update the time it took to get there
             self.time_count += timedelta(hours=(distance_traveled / self.speed))
-
             if (self.debug):
                 print(f"Truck {self.truck_id} at location {node.display()} at time " + self.time_count.strftime("%I:%M %p") + "\n")
                 self.pause()
-
             # We are currently at this node
             self.set_current_location(node)
             # Deliver packages
@@ -159,26 +166,45 @@ class Truck(DataManager):
                 if int(id) == int(package.get_package_id()):
                     # Check if the truck has enough space.
                     if len(self.current_packages) < self.capacity:
-                        package.set_status("En route, time : " + self.time_count.strftime("%I:%M %p") + " | To Hub : " + package.get_address())
+                        # Debug help
                         if (self.debug):
                             print(f"Loading Package\n----------------\n{package.display()}\nOnto Truck {self.truck_id}")
                             self.pause()
-                        self.current_packages.append(package)
+                        # If this package wasn't picked up the first time at 8:00 AM, we need a log entry at 8:00 AM
+                        if self.time_count != datetime.strptime(self.start_time, "%I:%M %p"):
+                            # Log it
+                            self.package_records.insert(int(package.get_package_id()), ListNode(package.snapshot(), int(package.get_package_id()), self.truck_id, datetime.strptime(self.start_time, "%I:%M %p")))
+                            # Handle package 9
+                            if int(package.get_package_id()) == int(9):
+                                # If 9 was picked up after 10:20 , we know the address changed
+                                if self.time_count >= datetime.strptime("10:20 AM", "%I:%M %p"):
+                                    package.set_address("410 S State St")
+                                    package.set_city("Salt Lake City")
+                                    package.set_state("UT")
+                                    package.set_zip("84111")
+                                    print(f"[INFO] Package {package.get_package_id()} Address corrected to {package.get_address()} at Time : " + self.time_count.strftime("%I:%M %p") + "\n")
+                        # We're loading the packages, assuming the time is 8:00 AM
+                        package.set_status("En route, time : " + self.time_count.strftime("%I:%M %p") + " | To Hub : " + package.get_address())
+                        self.current_packages.append(package) 
                     else:
                         print(f"Truck {self.truck_id} : Full not loading package : " + package.get_package_id() + "\n")
 ###########################################################################################
     """ Deliver appropriate packages at the current node
     """
     def deliver_package(self):
+        # The reason why we loop through the list of packages is because we may be carrying multiple packages that go to the same location
         for package in self.packages_list:
             if package in self.current_packages:
                 package.set_status("En route, time : " + self.time_count.strftime("%I:%M %p") + " | To Hub : " + package.get_address())
                 # Check to see if the package is at the right address
                 if str(package.get_address()) == str(self.get_current_location().get_address()):
+                    package.set_status("Delivered, time : " + self.time_count.strftime("%I:%M %p") + " | To Hub : " + package.get_address())
                     if (self.debug):
                         print(f"Delivering Package : {package.display()} at Location : {self.get_current_location().display()}")
                         self.pause()
                     self.current_packages.remove(package)
+                # Log the status of every package on the truck
+                self.package_records.insert(int(package.get_package_id()), ListNode(package.snapshot(), int(package.get_package_id()), self.truck_id, self.time_count))
 ############################################################################################
     """ Set the current location 
     """
@@ -208,9 +234,9 @@ class Truck(DataManager):
     """
     def display(self):
         status = (
-            f"Truck {self.truck_id} Status:\n"
+            f"Truck {self.truck_id} Statistics:\n"
             f"Miles Traveled: {self.miles_traveled}\n"
             f"Current Location: {self.current_node.display()}\n"
-            f"Current Time: {self.time_count.strftime('%I:%M %p')}\n"
+            f"Completion Time: {self.time_count.strftime('%I:%M %p')}\n"
         )
         print(status)

@@ -31,7 +31,7 @@ class DataManager:
                     deadline=row[5],
                     weight_kg=row[6],
                     special_note=row[7] if len(row) > 1 else None,
-                    status=f"Location : {self.nodes_list[0]} | Time : 8:00 AM",
+                    status=f"Location Hub : {self.nodes_list[0].get_name()} | Time : 8:00 AM",
                 )
                 if (
                     "Delayed on flight---will not arrive to depot until"

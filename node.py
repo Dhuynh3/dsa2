@@ -52,7 +52,8 @@ class Node:
     # Display Node Information
     def display(self):
         return f"Node {self.node_id} | Name : {self.name} | Address: {self.address}"
-
+    def __str__(self):
+        return f"Node {self.node_id} | Name : {self.name} | Address: {self.address}"
     # Snapshot a unique object
     def snapshot(self):
         return Node(

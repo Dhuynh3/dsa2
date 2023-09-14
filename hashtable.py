@@ -1,6 +1,5 @@
 from linkedlist import SinglyLinkedList
 
-
 # Chaining Hash Table with Linked List Implementation
 class HashTable:
     # O(N)
@@ -32,3 +31,6 @@ class HashTable:
             print(f"[{index}] :")
             bucket.display()
             index += 1
+    # Get the hash table buckets
+    def get_bucket(self):
+        return self.buckets

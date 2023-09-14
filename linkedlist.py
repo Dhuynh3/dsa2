@@ -1,18 +1,18 @@
 from datetime import datetime
-
 # Example of a Singly Linked List Node
 class ListNode: 
     # value : any object
     # id : int
     # priority : int
-    def __init__(self, value, id, time=datetime.strptime("8:00 AM", "%I:%M %p"), next=None):
+    def __init__(self, value, id, truck_id, time=datetime.strptime("8:00 AM", "%I:%M %p"), next=None):
         self.value = value
         self.time = time
         self.id = int(id)
+        self.truck_id = truck_id
         # Needed to transverse the list
         self.next = next
     def snapshot(self):
-        return ListNode(self.value, self.id, self.time)
+        return ListNode(self.value, self.id, self.time, self.truck_id)
 # Singly Linked List Implementation
 class SinglyLinkedList:
     def __init__(self):
@@ -107,6 +107,6 @@ class SinglyLinkedList:
         nodes = []
         current_node = self.head
         while current_node:
-            nodes.append(str(current_node.id))
+            nodes.append(str(current_node.value.display()))
             current_node = current_node.next
-        print(" -> ".join(nodes))
+        print("\n".join(nodes))
