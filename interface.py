@@ -17,7 +17,7 @@ class Interface:
         self.options = [
             "Option 1: Query Package by ID",
             "Option 2: Query All Packages Given Time",
-            "Option 3: Query Package by ID and Time",
+            "Option 3: Query Specific Package in Time",
             "Option 4: Exit"
         ]
     def display_menu(self):
@@ -35,7 +35,7 @@ class Interface:
                     print("Invalid choice. Please enter a number between 1 and 4.")
             except ValueError:
                 print("Invalid choice. Please enter a number between 1 and 4.")
-    def search_package_given_params(self, time, id=None):
+    def search_package_given_params(self, time, id=None, address=None):
         # If we didnt specify an ID
         if id == None:
             # Go through every single index
@@ -48,7 +48,13 @@ class Interface:
                 # first instance record of the package that is less than the time given
                 current_node = linkedlist.head
                 while current_node:
+                    # It is less than the given time.
                     if current_node.time.replace(year=2000, month=1, day=1, second=0, microsecond=0) <= time.replace(year=2000, month=1, day=1, second=0, microsecond=0):
+                        # Check if it matches our extra fields
+                        if (address == current_node.value.get_address()):
+                            print(current_node.value.display())
+                            break
+
                         print(current_node.value.display())
                         break
                     current_node = current_node.next
@@ -63,6 +69,8 @@ class Interface:
                     print(current_node.value.display())
                     break
                 current_node = current_node.next
+            
+
     def run(self):
         while True:
             self.display_menu()
