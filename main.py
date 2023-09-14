@@ -28,14 +28,7 @@ if __name__ == "__main__":
     truck_two.display()
 
     total_miles_traveled = truck_one.get_miles_traveled() + truck_two.get_miles_traveled()
-    print(f"Total Miles Traveled From Trucks {truck_one.get_truck_id()} and {truck_two.get_truck_id()} : " + str(total_miles_traveled) + " miles\n\n")
+    print(f"Total Miles Traveled From Trucks {truck_one.get_truck_id()} and {truck_two.get_truck_id()} : " + str(total_miles_traveled) + " miles")
 
-    # Search hashtable -> linkedlist -> search
-    #truck_one.get_package_records().search(1).display()
-
-
-
-
-    print(truck_one.get_package_records().search(3).display())
-
-    interface = Interface([truck_one.get_package_records, truck_two.get_package_records])
+    interface = Interface([truck_one.get_package_records(), truck_two.get_package_records()])
+    interface.run()

@@ -12,7 +12,7 @@ class ListNode:
         # Needed to transverse the list
         self.next = next
     def snapshot(self):
-        return ListNode(self.value, self.id, self.time, self.truck_id)
+        return ListNode(self.value, self.id, self.truck_id, self.time)
 # Singly Linked List Implementation
 class SinglyLinkedList:
     def __init__(self):
@@ -76,11 +76,18 @@ class SinglyLinkedList:
             self.head = None
             self.tail = None
         return current_node
+    # Peek the head of the node
     def peek(self):
         if self.is_empty() == True:
             return None
         else:
             return self.head
+    # Peek the tail of the node
+    def peek_last(self):
+        if self.tail != None:
+            return self.tail
+        else:
+            return None
     # Get the size of the linked list
     def size(self):
         count = 0
@@ -102,6 +109,17 @@ class SinglyLinkedList:
             current_node = current_node.next
         # Return a reference to the copied list
         return copied_list
+    # Reverse a linked list
+    def reverse(self):
+        previous_node = None
+        current_node = self.head
+        while current_node:
+            next_node = current_node.next
+            current_node.next = previous_node
+            previous_node = current_node
+            current_node = next_node
+        self.head = previous_node
+
     # Traverse the linked list and print information
     def display(self):
         nodes = []

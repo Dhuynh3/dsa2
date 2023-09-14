@@ -24,6 +24,10 @@ class HashTable:
         bucket_index = self.hash_function(key)
         return self.buckets[bucket_index]
 
+    # O(1)
+    def update_linked_list(self, key, singlylinkedlist):
+        self.buckets[key] = singlylinkedlist
+
     # Print the Hash Table
     def display(self):
         index = 0
@@ -31,6 +35,11 @@ class HashTable:
             print(f"[{index}] :")
             bucket.display()
             index += 1
+
     # Get the hash table buckets
     def get_bucket(self):
         return self.buckets
+    # Get size of hash table
+
+    def get_size(self):
+        return self.size
