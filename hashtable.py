@@ -17,12 +17,16 @@ class HashTable:
     def insert(self, key, value):
         bucket_index = self.hash_function(key)
         self.buckets[bucket_index].append_node(value)
-        return
 
     # O(1)
     def search(self, key):
         bucket_index = self.hash_function(key)
         return self.buckets[bucket_index]
+
+    # O(N)
+    def search_chaining(self, key, value):
+        bucket_index = self.hash_function(key)
+        return self.buckets[bucket_index].search_linkedlist(value)
 
     # O(1)
     def update_linked_list(self, key, singlylinkedlist):

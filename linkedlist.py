@@ -52,6 +52,14 @@ class SinglyLinkedList:
                 return True
             current_node = current_node.next
         return False
+    # Similar to has_value but returns the ListNode
+    def search_linkedlist(self, value):
+        current_node = self.head
+        while current_node:
+            if current_node.id == value.id:
+                return current_node
+            current_node = current_node.next
+        return None
     # Append a node without duplicates
     def append_node_without_duplicates(self, new_list_node):
         if not self.has_value(new_list_node.id):

@@ -11,18 +11,18 @@ if __name__ == "__main__":
     print("-------------------- WGU PARCEL ---------------------\n")
 
     truck_one = Truck(1, "8:00 AM", 16)
-    truck_one.load_packages_by_id([1, 13, 14, 15, 16, 19, 20, 23, 29, 30, 31, 33, 34, 37, 39, 40])
+    truck_one.load_packages_by_id([16,15,19,14,30,31,33,13,34,39,37,40,20,23,1,29]) # [1, 13, 14, 15, 16, 19, 20, 23, 29, 30, 31, 33, 34, 37, 39, 40]
     truck_one.start_delivery(truck_one.nodes_list[0], truck_one.nodes_list[0])
  
-    truck_one.load_packages_by_id([2, 4, 5, 7, 8, 9, 10, 11, 12, 17, 21, 22]) 
+    truck_one.load_packages_by_id([10,12,7,5,2,17,21,8,11,4,22,9]) # [2, 4, 5, 7, 8, 9, 10, 11, 12, 17, 21, 22]
     truck_one.start_delivery(truck_one.nodes_list[0], truck_one.nodes_list[0])
 
     truck_two = Truck(2, "8:00 AM", 16)
-    truck_two.load_packages_by_id([3, 18, 36, 38, 24, 26, 27, 35])
+    truck_two.load_packages_by_id([27,26,35,24,36,18,3,38]) # [3, 18, 36, 38, 24, 26, 27, 35] # [27,26,35,24,36,18,3,38]
     truck_two.start_delivery(truck_two.nodes_list[0], truck_two.nodes_list[0])
 
     truck_two.load_packages_by_id([6, 25, 28, 32])
-    truck_two.start_delivery(truck_two.nodes_list[0], truck_two.nodes_list[0])
+    truck_two.start_delivery(truck_two.nodes_list[0], truck_two.nodes_list[0]) # [6, 25, 28, 32]
     
     truck_one.display()
     truck_two.display()

@@ -51,10 +51,19 @@ class Truck(DataManager):
             visited_node_list = self.dijkstra(start_node, list_of_node_route)
             # This is usually the first node because it's the one we're on to compare against the rest of the nodes.
             for node in visited_node_list:
+                if (self.debug):
+                    print("Node ID : " + str(node.get_id())+ " Shortest Distance : "+ str(node.get_shortest_distance())+ " | Previous : "+ str(node.get_previous_node()))
+                    print("--------------------------------------------------")
                 if node.get_previous_node() == None:
                     visited_node_list.remove(node)
-            # Get the next closes node
+            # Get the next closes node.
+            """ Limitations, there is no implementation currently to handle cases
+                where there is 2 nodes close by with the same distance
+            """
             min_node = min(visited_node_list, key=lambda node: node.shortest_distance_from_selected_node)
+            if (self.debug):
+                print("Min Node Selected : " + str(min_node))
+                self.pause()
             # Append it to our list
             optimized_travel_path.append(min_node)
             # We have already checked out this node
